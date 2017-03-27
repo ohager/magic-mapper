@@ -126,7 +126,7 @@ The values describe how to map the related property. Following value types are p
 
 ### Schema Example
 
-```
+```javascript
 const originalObject = {
 	id : 1,
 	name: 'John',
@@ -157,7 +157,7 @@ When using a schema, you need to define explicitly a mapping function, as the cu
 a nested schema as object assignment only.
 
 ### Example
-```
+```javascript
 const originalObject = {
     id : 1,
     name: 'John',
