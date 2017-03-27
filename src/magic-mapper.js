@@ -1,7 +1,9 @@
 
+const Direct = Symbol('MagicMapper.Direct');
+
 function mapWithSchema(propertyName, schema, sourceValue){
 	const schemaValue = schema[propertyName];
-	if(schemaValue === undefined){
+	if(schemaValue === Direct){
 		return sourceValue;
 	}
 	else if (typeof schemaValue === 'function'){
@@ -13,19 +15,22 @@ function mapWithSchema(propertyName, schema, sourceValue){
 }
 
 /**
- * Object Mapping Helper
+ * This JSON Mapper helps you to map JSON objects to other ones.
  */
 class MagicMapper{
 
 	/**
-	 *
-	 * @param options
-	 * - transform: fn(propName) : string - The function is used to transform property names _before_ mapping. Applies for all mapping functions in this class.
-	 * - exclusive: bool - Determines if all props shall be mapped, or only the props defined in the schema
-	 * @example
-	 * const mapper = new MagicMapper( pname => pname.toLowerCase());
-	 * const mapped = mapper.map({ Foo: "value", Bar : "rabatz" })
-	 * // mapped => { foo: "value", bar : "rabatz" }
+	 * Symbol to declare an object to be mapped as it is.
+	 * @returns {Symbol}
+	 * @constructor
+	 */
+	static get Direct() { return Direct; }
+
+	/**
+	 * @param {object} options Options that the Mapper uses on _all_ mappings. Available options are:
+	 * - propertyTransform: transform function _fn(propertyName)_ for property
+	 * - valueTransform: transform function _fn(value)_ for value
+	 * - exclusive: flag to indicate whether _all_ properties shall be mapped (false), or only properties defined in passed schema (true)
 	 */
 	constructor(options = {}){
 
@@ -43,10 +48,10 @@ class MagicMapper{
 	}
 
 	/**
-	 * Maps _all_ properties of src to a new object
-	 * @param from The source object
-	 * @param schema Optional Schema, that will be applied selectively
-	 * @returns A new object with all properties and values from source object
+	 * Maps properties of src to a new object
+	 * @param {object} from The source object
+	 * @param {object} schema Optional Schema, that will be applied selectively. When using _options.exclusive=true_ schema is mandatory.
+	 * @returns {object} A new object with all properties and values from source object
 	 */
 	map(from, schema = null){
 		let mapped = {};
@@ -57,13 +62,13 @@ class MagicMapper{
 			const tp = this.options.propertyTransform ? this.options.propertyTransform(p) : p;
 			const fromValue = this.options.valueTransform ? this.options.valueTransform(from[p]) : from[p];
 
-			//if(!this.options.exclusive && !schema[tp]) return;
+			if(this.options.exclusive && !schema[tp]) return;
 
 			if(schema && schema.hasOwnProperty(tp)){
 				mapped[tp] = mapWithSchema(tp, schema, fromValue);
 			}
 			else if(Array.isArray(fromValue)){
-				mapped[tp] = fromValue.map( v => this.map(v,schema) );
+				mapped[tp] = fromValue.map( v => typeof v === 'object' ? this.map(v,schema) : v );
 			}
 			else if (fromValue && (typeof fromValue === 'object')){
 				mapped[tp] = this.map(fromValue, schema);
