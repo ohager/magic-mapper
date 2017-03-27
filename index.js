@@ -1,2 +1,2 @@
-import MagicMapper from "./lib/magic-mapper";
-export default MagicMapper;
+const MagicMapper = require("./lib/magic-mapper");
+module.exports = MagicMapper;
