@@ -1,4 +1,5 @@
-# Still under development
+[![Build Status](https://travis-ci.org/ohager/magic-mapper.svg?branch=master)](https://travis-ci.org/ohager/magic-mapper)
+
 
 # magic-mapper
 Minimalistic JSON mapper
