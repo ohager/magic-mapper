@@ -85,8 +85,8 @@ const originalObject = {
 }
 
 const mapper = new MagicMapper({
-    propertyTransformation: propertyName => propertyName[0].toUpperCase() + propertyName.substr(1),
-    valueTransformation: value => typeof value === 'string' ? value.toUpperCase() : value
+    propertyTransform: propertyName => propertyName[0].toUpperCase() + propertyName.substr(1),
+    valueTransform: value => typeof value === 'string' ? value.toUpperCase() : value
 });  
 
 const mappedObject = mapper.map(originalObject, {
