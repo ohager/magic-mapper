@@ -104,7 +104,7 @@ mappedobject = {
 
 # Advanced Mapping 
 
-# Mapping Schema
+## Mapping Schema
 
 The schema is used for two purposes,
 
