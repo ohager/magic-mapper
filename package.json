@@ -1,6 +1,6 @@
 {
   "name": "magic-mapper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Minimalistic, but powerful JSON Object Mapper",
   "main": "index.js",
   "repository": "https://github.com/ohager/magic-mapper.git",
