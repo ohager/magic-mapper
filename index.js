@@ -1,2 +1,1 @@
-const MagicMapper = require("./lib/magic-mapper");
-module.exports = MagicMapper;
+module.exports = require('./lib/magic-mapper').default;
