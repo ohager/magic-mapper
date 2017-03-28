@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/ohager/magic-mapper.svg?branch=master)](https://travis-ci.org/ohager/magic-mapper)
 [![codecov](https://codecov.io/gh/ohager/magic-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/ohager/magic-mapper)
 
-# magic-mapper
-Minimalistic JSON mapper
+# ✨ magic-mapper 
+Minimalistic, flexible and easy-to-use JSON mapper 🍰 🍭 🎉 
 
 ``npm install magic-mapper --save``
 
@@ -111,7 +111,7 @@ The schema is used for two purposes,
 - Define exclusive mapping
 - Define property transformations
  
-> Note: When used for exclusive mapping a schema is mandatory. 
+> ☠ When used for exclusive mapping a schema is mandatory. 
 
 A schema is just a JSON object, that should match structurally to the input object.
 The values describe how to map the related property. Following value types are possible
@@ -122,7 +122,7 @@ The values describe how to map the related property. Following value types are p
      -> when using _options.exclusive=false_ the direct mapping is applied automatically for _all_ properties, 
      except the schema says something different. 
    
-> Note: When using global property transformation, use the transformed property names instead.
+> ☠ When using global property transformation, use the transformed property names instead.
 
 ### Schema Example
 
