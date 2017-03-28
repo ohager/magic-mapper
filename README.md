@@ -152,9 +152,7 @@ mappedobject = {
 
 ## Mapping Nested Objects
 
-Principally, mapping nested objects is no problem, i.e. global transformations are applied recursively.
-When using a schema, you need to define explicitly a mapping function, as the current implementation detects 
-a nested schema as object assignment only.
+Mapping nested objects is straightforward. Just define a nested schema conforming your needs.  
 
 ### Example
 ```javascript
@@ -171,19 +169,49 @@ const originalObject = {
     }
 }
 
-const personMapSchema = {
-    birthDate: date => moment(date).locale('de').format('LLLL')
-}
 
 const toGermanDate = date => moment(date).locale('de').format('LLLL');
 
 const mapper = new MagicMapper();
 const mappedObject = mapper.map(originalObject, {
     birthDate : toGermanDate,
-    father: f => mapper.map(f, { birthDate: toGermanDate }) // nested mapping
+    father: { 
+    	birthDate: toGermanDate 
+    } // nested mapping
 })
 ```
  
+### Example with different mappers
+
+You can also combine mapping functions to map nested objects with different mappers
+
+```javascript
+const originalObject = {
+    id : 1,
+    name: 'John',
+    lastName: 'Doe',
+    birthDate: '1996-03-27T17:03:02Z',
+    father: {
+        id : 1,
+        name: 'John Sr.',
+        lastName: 'Doe',
+        birthDate: '1956-01-02T14:56:20Z',
+    }
+}
+
+const toGermanDate = date => moment(date).locale('de').format('LLLL');
+
+const mapper = new MagicMapper();
+const fatherMapper = new MagicMapper({exclusive:true});
+
+const mappedObject = mapper.map(originalObject, {
+    birthDate : toGermanDate,
+    father: f => fatherMapper.map(f, {
+    	name: MagicMapper.Direct,
+    	lastName : MagicMapper.Direct
+    })
+})
+```
  
 ## Mapping Arrays
 

@@ -61,17 +61,25 @@ class MagicMapper{
 		Object.keys(from).forEach( p => {
 			const tp = this.options.propertyTransform ? this.options.propertyTransform(p) : p;
 			const fromValue = this.options.valueTransform ? this.options.valueTransform(from[p]) : from[p];
+			const isArray = fromValue && Array.isArray(fromValue);
+			const isObject = fromValue && (typeof fromValue === 'object') && !isArray;
 
 			if(this.options.exclusive && !schema[tp]) return;
 
-			if(schema && schema.hasOwnProperty(tp)){
+			if(!isObject && schema && schema.hasOwnProperty(tp)){
 				mapped[tp] = mapWithSchema(tp, schema, fromValue);
 			}
-			else if(Array.isArray(fromValue)){
+			else if(isArray){
 				mapped[tp] = fromValue.map( v => typeof v === 'object' ? this.map(v,schema) : v );
 			}
-			else if (fromValue && (typeof fromValue === 'object')){
-				mapped[tp] = this.map(fromValue, schema);
+			else if (isObject){
+				const s = schema && schema[tp];
+				if(typeof s === 'function'){
+					mapped[tp] = schema[tp].call(null, fromValue);
+				}
+				else{
+					mapped[tp] = this.map(fromValue, s );
+				}
 			}
 			else if(!this.options.exclusive){
 				mapped[tp] = fromValue;

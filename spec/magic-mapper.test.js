@@ -12,7 +12,7 @@ const original = {
 };
 
 test('global property transformation test', () => {
-	const mapper = new MagicMapper({propertyTransform: (name) => name.toLowerCase() });
+	const mapper = new MagicMapper({propertyTransform: name => name.toLowerCase() });
 
 	const mapped = mapper.map(original);
 
@@ -55,6 +55,29 @@ test('schema mapping test', () => {
 	const mappingSchema = {
 		A: v => v.toUpperCase(),
 		B: 1, // direct value
+		C: { // maps deeply!
+			CA: 'Foo',
+			CB: a => a.map( v => v*2 )
+		}
+	};
+
+	const mapped = mapper.map(original, mappingSchema);
+
+	expect(mapped.A).toBe('VALUEA');
+	expect(mapped.B).toEqual(1);
+	expect(mapped.C.CA).toBe('Foo');
+	expect(mapped.C.CB).toEqual([8,10,12]);
+	expect(mapped.C.CC).toEqual({cca:'valueCCA', ccb: 'valueCCB'});
+	expect(mapped.D).toEqual([{da:1},{db: 'valueDDB'}]);
+});
+
+
+test('schema mapping test with custom mapper function', () => {
+	const mapper = new MagicMapper();
+
+	const mappingSchema = {
+		A: v => v.toUpperCase(),
+		B: 1, // direct value
 		C: v => mapper.map(v, { // maps deeply!
 			CA: 'Foo',
 			CB: a => a.map( v => v*2 )
@@ -79,6 +102,25 @@ test('exclusive mapping test', () => {
 	expect(mapped.A).toBeDefined();
 	expect(mapped.B).toBeDefined();
 	expect(mapped.C).not.toBeDefined();
+	expect(mapped.D).not.toBeDefined();
+});
+
+
+test('nested mapping with different mappers test', () => {
+	const mapper = new MagicMapper();
+	const deepMapper = new MagicMapper({exclusive: true});
+
+	const mapped = mapper.map(original, {
+		C: c => deepMapper.map(c, {CA:MagicMapper.Direct, CB:MagicMapper.Direct})
+	});
+
+	expect(mapped.A).toBeDefined();
+	expect(mapped.B).toBeDefined();
+	expect(mapped.C).toBeDefined();
+	expect(mapped.D).toBeDefined();
+	expect(mapped.C.CA).toBe('valueCA');
+	expect(mapped.C.CB).toEqual([4,5,6]);
+	expect(mapped.C.CC).not.toBeDefined();
 });
 
 test('exclusive mapping test without schema', () => {
