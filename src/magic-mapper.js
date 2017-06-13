@@ -1,5 +1,5 @@
 
-const Direct = '@@MagicMapper.Direct'; // I prefer Symbol, but doesn't work in IE
+const Direct = '@@MagicMapper.Direct'; // I prefer Symbol, but i
 
 function mapWithSchema(propertyName, schema, sourceValue){
 	const schemaValue = schema[propertyName];
