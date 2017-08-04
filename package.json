@@ -1,6 +1,6 @@
 {
   "name": "magic-mapper",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "✨ Minimalistic, flexible and easy-to-use JSON mapper 🍰 🍭 🎉",
   "main": "index.js",
   "repository": "https://github.com/ohager/magic-mapper.git",
@@ -9,7 +9,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.2.2",
-    "codecov": "^2.1.0",
+    "codecov": "^2.3.0",
     "gulp": "^3.9.1",
     "jest": "^19.0.2",
     "request": "latest"
