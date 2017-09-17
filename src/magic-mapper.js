@@ -14,6 +14,7 @@ function mapWithSchema(propertyName, schema, sourceValue){
 	}
 }
 
+
 /**
  * This JSON Mapper helps you to map JSON objects to other ones.
  */
@@ -55,9 +56,13 @@ class MagicMapper{
 	 */
 	map(from, schema = null){
 		let mapped = {};
-
+		
 		if(this.options.exclusive && !schema) throw "Exclusive option requires a schema!";
 
+		if(Array.isArray(from)){
+			return from.map( v => typeof v === 'object' ? this.map(v,schema) : v );
+		}
+		
 		Object.keys(from).forEach( p => {
 			const tp = this.options.propertyTransform ? this.options.propertyTransform(p) : p;
 			const fromValue = this.options.valueTransform ? this.options.valueTransform(from[p]) : from[p];
