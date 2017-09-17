@@ -215,7 +215,23 @@ const mappedObject = mapper.map(originalObject, {
  
 ## Mapping Arrays
 
-Arrays can be mapped as it were normal values. If you want to transform the arrays values you can simply do this:
+Arrays can be mapped as it were normal objects. 
+If the initial object is an Array, the mapped result will be an Array, too.
+
+```javascript
+
+const originalObject = [ {a:1},{a:2} ]
+const mapper = new MagicMapper();
+const mappedObject = mapper.map(originalObject, {
+	a : a => a * 2
+})
+
+/*
+mappedObject = [{a:2},{a:4}]
+*/
+
+
+If you want to transform the arrays values you can simply do this:
 
 ```javascript
 
